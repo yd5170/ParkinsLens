@@ -1,0 +1,61 @@
+# ==========================================
+# BRAINTENSOR .gitignore
+# ==========================================
+
+# 1. 원본 DICOM/메타데이터 제외 (수 GB, README 안내문만 포함)
+00_RawData/303_1713/
+
+# 2. 전처리된 NIfTI MRI 이미지 데이터 폴더 제외 (6.7GB)
+# (코드, CSV 매니페스트, 스크립트, QC 로그는 Git에 포함하고 실제 이미지 볼륨 데이터만 제외합니다)
+01_Preprocessing/전처리_0713/
+01_Preprocessing/전처리_0713_v2/
+01_Preprocessing/전처리_ref21order_v1/
+01_Preprocessing/전처리_ref21order_v2/
+01_Preprocessing/전처리_ref21order_zscore/
+
+# 2-1. MNIPD25 아틀라스(참고문헌21 정합용, 3.9GB) 및 로컬 백업 zip 제외
+00_RawData/atlas/
+01_Preprocessing/*.zip
+
+# 2-1-1. 위 대용량 폴더/zip들이 01_Preprocessing/past/ 보관 폴더로 옮겨진 경우도 동일하게 제외
+# (경로가 바뀌면 위 규칙과 매칭이 안 돼 수십 GB가 그대로 git add 대상이 되는 문제 방지.
+# past/ 안의 작은 파일들(QC 로그 csv/png, README 등)은 계속 추적 대상 - past/ 전체를 막지 않음)
+01_Preprocessing/past/전처리_0713/
+01_Preprocessing/past/전처리_0713_v2/
+01_Preprocessing/past/전처리_ref21order_v2/
+01_Preprocessing/past/전처리_ref21order_zscore/
+01_Preprocessing/past/*.zip
+
+# 2-2. 논문 PDF에서 pdftotext로 추출한 평문 텍스트 제외(원본 PDF는 07_Document/에 이미 포함됨,
+# 중복이며 저작권상 평문 재배포는 최소화)
+07_Document/*.txt
+
+# 3. 로컬 정리용 임시 폴더 제외
+삭제/
+
+# 4. 로컬 학습 결과 및 가중치 제외 (향후 대용량 모델 파일 방지)
+03_Model_Training/checkpoints/
+03_Model_Training/training_logs/
+06_Result/
+
+# 4. 파이썬 캐시 및 빌드 파일 제외
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.ipynb_checkpoints/
+
+# 5. 로컬 정리 작업 로그 및 임시 파일 제외
+정리_작업_로그_*.txt
+정리_작업_로그_v2_*.txt
+*.log
+
+# 6. OS 생성 파일 제외
+.DS_Store
+Thumbs.db
+
+# 7. Claude Code 로컬 세션 설정 제외
+.claude/
+
+# 8. 별도로 관리하는 해커톤 자료 제외 (이 저장소와 무관)
+해커톤/

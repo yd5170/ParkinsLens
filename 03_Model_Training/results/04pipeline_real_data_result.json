@@ -1,0 +1,18 @@
+{
+  "cca_n_components": 100,
+  "fused_dim": 200,
+  "woa_selected": 4,
+  "woa_total": 200,
+  "woa_best_fitness": 0.4948016096579477,
+  "woa_elapsed_sec": 213.2,
+  "baseline_no_woa": {
+    "accuracy": 0.34782608695652173,
+    "f1_macro": 0.35991285403050105
+  },
+  "after_woa": {
+    "accuracy": 0.391304347826087,
+    "precision_macro": 0.3452495974235104,
+    "recall_macro": 0.3451213818860877,
+    "f1_macro": 0.338034188034188
+  }
+}

@@ -1,0 +1,40 @@
+import os
+import numpy as np
+from sklearn.cross_decomposition import CCA
+
+_DIR = os.path.dirname(os.path.abspath(__file__))
+
+train = np.load(os.path.join(_DIR, "features_train.npz"))
+val = np.load(os.path.join(_DIR, "features_val.npz"))
+test = np.load(os.path.join(_DIR, "features_test.npz"))
+
+A_train, B_train, y_train = train["fv3"], train["fv4"], train["y"]
+A_val, B_val, y_val = val["fv3"], val["fv4"], val["y"]
+A_test, B_test, y_test = test["fv3"], test["fv4"], test["y"]
+
+print("train A(CNN):", A_train.shape, "B(ResNet):", B_train.shape)
+
+N_COMPONENTS = 211  # = n_train(212) - 1, 수학적 최댓값 (사용자 확정)
+
+cca = CCA(n_components=N_COMPONENTS, max_iter=2000)
+cca.fit(A_train, B_train)
+
+WA_train, WB_train = cca.transform(A_train, B_train)
+WA_val, WB_val = cca.transform(A_val, B_val)
+WA_test, WB_test = cca.transform(A_test, B_test)
+
+print("Canonical projection shapes - train:", WA_train.shape, WB_train.shape)
+
+# 두 방식(논문 Eq6/Eq7) 다 저장해서 나중에 어느 쪽을 쓸지 결정
+for name, (wa, wb, y) in [
+    ("train", (WA_train, WB_train, y_train)),
+    ("val", (WA_val, WB_val, y_val)),
+    ("test", (WA_test, WB_test, y_test)),
+]:
+    z_concat = np.concatenate([wa, wb], axis=1)   # Eq(6): Z1 = (A|B), dim=2*211=422
+    z_sum = wa + wb                                # Eq(7): Z2 = A+B, dim=211
+    np.savez(os.path.join(_DIR, f"fused_{name}.npz"),
+             z_concat=z_concat, z_sum=z_sum, y=y)
+    print(name, "Z1(concat):", z_concat.shape, "Z2(sum):", z_sum.shape)
+
+print("CCA done")

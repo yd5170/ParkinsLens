@@ -1,0 +1,193 @@
+# -*- coding: utf-8 -*-
+"""
+WOA(Whale Optimization Algorithm) 기반 특징 선택 - 논문 "WOA for feature selection" 절,
+Eq.(8)~(17), Table7 하이퍼파라미터 그대로 구현.
+
+입력: CCA 융합 결과(Eq7 합산, 211차원) - Eq6/Eq7 비교에서 합산이 더 좋았으므로 채택.
+해(solution): 길이 N(=211)의 이진 벡터, 1=특징 선택/0=제외.
+적합도(Eq.17): f = alpha*R(D) + beta*(|R|/|N|), R(D)=KNN 분류 오류율(낮을수록 좋음),
+beta=1-alpha. 논문 미기재로 자체결정: alpha=0.99(2026-07-03 세션 DEVIATIONS.md 기록),
+KNN k=5(동일 근거).
+
+[자체결정 - 이진화 방식] 연속 위치값을 sigmoid로 [0,1] 압축 후 Table7의
+threshold(thres)=0.5 기준으로 이진화(표준 Binary WOA 방식, 논문에 정확한 변환식은
+없음).
+
+[자체결정 - R(D) 평가셋] test셋 오염을 피하기 위해 val셋(45개)으로 KNN 오류율 계산
+(train으로 KNN fit, val로 평가) - 최종 성능 보고는 test로 별도 수행.
+"""
+import os
+import numpy as np
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score, precision_recall_fscore_support, classification_report
+from sklearn.ensemble import GradientBoostingClassifier
+
+_DIR = os.path.dirname(os.path.abspath(__file__))
+
+# ---- Table 7 하이퍼파라미터 ----
+POP_SIZE = 100
+N_ITER = 200
+LB, UB = 0.0, 1.0
+B_CONST = 1.0        # logarithmic spiral constant
+THRESHOLD = 0.5       # 이진화 임계값
+N_INDEPENDENT_RUNS = 20
+
+# ---- 논문 미기재, 자체결정(DEVIATIONS.md 2026-07-03 기록과 동일) ----
+ALPHA = 0.99
+BETA = 1 - ALPHA
+KNN_K = 5
+
+
+def sigmoid(x):
+    return 1.0 / (1.0 + np.exp(-np.clip(x, -500, 500)))
+
+
+def binarize(continuous_pos):
+    return (sigmoid(continuous_pos) > THRESHOLD).astype(int)
+
+
+def fitness(binary_mask, Xtr, ytr, Xval, yval):
+    n_selected = binary_mask.sum()
+    if n_selected == 0:
+        return 1.0  # 특징 0개는 최악(1.0, 오류율 100%로 취급)
+    idx = np.where(binary_mask == 1)[0]
+    knn = KNeighborsClassifier(n_neighbors=KNN_K)
+    knn.fit(Xtr[:, idx], ytr)
+    pred = knn.predict(Xval[:, idx])
+    error_rate = 1.0 - accuracy_score(yval, pred)
+    return ALPHA * error_rate + BETA * (n_selected / len(binary_mask))
+
+
+def woa_run(Xtr, ytr, Xval, yval, n_features, rng):
+    """WOA 1회 독립 실행. 논문 Eq(8)~(16) 그대로. 수렴 곡선(iteration별 best fitness)도 기록."""
+    # 초기화: 100마리 무작위 이진 위치 + 대응하는 연속 위치(sigmoid 역변환 대신 그냥 0/1 스케일로 시작)
+    positions = rng.uniform(LB, UB, size=(POP_SIZE, n_features))
+    binary_positions = binarize(positions)
+
+    fitness_vals = np.array([fitness(binary_positions[i], Xtr, ytr, Xval, yval) for i in range(POP_SIZE)])
+    best_idx = fitness_vals.argmin()
+    best_pos = positions[best_idx].copy()
+    best_binary = binary_positions[best_idx].copy()
+    best_fitness = fitness_vals[best_idx]
+    convergence = [best_fitness]
+
+    for u in range(N_ITER):
+        a = 2.0 - u * (2.0 / N_ITER)  # 2->0으로 선형 감소
+        for i in range(POP_SIZE):
+            r = rng.uniform(0, 1, size=n_features)
+            A = 2 * a * r - a
+            C = 2 * r
+            p = rng.uniform(0, 1)
+
+            if p < 0.5:
+                if np.abs(A).mean() < 1:
+                    # Encircling prey (Eq.8,9)
+                    D = np.abs(C * best_pos - positions[i])
+                    positions[i] = best_pos - A * D
+                else:
+                    # Search for prey - 무작위 개체 기준 탐색 (Eq.15,16)
+                    rand_idx = rng.integers(0, POP_SIZE)
+                    D = np.abs(C * positions[rand_idx] - positions[i])
+                    positions[i] = positions[rand_idx] - A * D
+            else:
+                # Bubble-net attack(spiral) (Eq.12,13)
+                D = np.abs(best_pos - positions[i])
+                l = rng.uniform(-1, 1, size=n_features)
+                positions[i] = D * np.exp(B_CONST * l) * np.cos(2 * np.pi * l) + best_pos
+
+            positions[i] = np.clip(positions[i], LB, UB)
+
+        binary_positions = binarize(positions)
+        fitness_vals = np.array([fitness(binary_positions[i], Xtr, ytr, Xval, yval) for i in range(POP_SIZE)])
+        cur_best_idx = fitness_vals.argmin()
+        if fitness_vals[cur_best_idx] < best_fitness:
+            best_fitness = fitness_vals[cur_best_idx]
+            best_pos = positions[cur_best_idx].copy()
+            best_binary = binary_positions[cur_best_idx].copy()
+        convergence.append(best_fitness)
+
+    return best_binary, best_fitness, convergence
+
+
+if __name__ == "__main__":
+    import json
+    import time
+
+    sys_stdout_line_buffer = getattr(__import__("sys").stdout, "reconfigure", None)
+    if sys_stdout_line_buffer:
+        __import__("sys").stdout.reconfigure(line_buffering=True)
+
+    train = np.load(os.path.join(_DIR, "fused_train.npz"))
+    val = np.load(os.path.join(_DIR, "fused_val.npz"))
+    test = np.load(os.path.join(_DIR, "fused_test.npz"))
+
+    Xtr, ytr = train["z_sum"], train["y"]
+    Xval, yval = val["z_sum"], val["y"]
+    Xte, yte = test["z_sum"], test["y"]
+    n_features = Xtr.shape[1]
+
+    print(f"특징 차원: {n_features}, alpha={ALPHA}, KNN k={KNN_K}, "
+          f"population={POP_SIZE}, iterations={N_ITER}, 독립실행={N_INDEPENDENT_RUNS}")
+
+    all_runs = []
+    t_total0 = time.time()
+    for run_i in range(N_INDEPENDENT_RUNS):
+        t0 = time.time()
+        rng = np.random.default_rng(1000 + run_i)  # 실행마다 다른 시드
+        best_binary, best_fitness, convergence = woa_run(Xtr, ytr, Xval, yval, n_features, rng)
+        elapsed = time.time() - t0
+
+        idx = np.where(best_binary == 1)[0]
+        clf = GradientBoostingClassifier(random_state=42)
+        clf.fit(Xtr[:, idx], ytr)
+        pred = clf.predict(Xte[:, idx])
+        acc = accuracy_score(yte, pred)
+        p, r, f1, _ = precision_recall_fscore_support(yte, pred, average="macro", zero_division=0)
+
+        run_result = {
+            "run": run_i,
+            "seed": 1000 + run_i,
+            "n_selected": int(best_binary.sum()),
+            "selected_indices": idx.tolist(),
+            "fitness": float(best_fitness),
+            "convergence": [float(c) for c in convergence],
+            "test_accuracy": float(acc),
+            "test_precision_macro": float(p),
+            "test_recall_macro": float(r),
+            "test_f1_macro": float(f1),
+            "elapsed_sec": round(elapsed, 1),
+        }
+        all_runs.append(run_result)
+        print(f"[실행 {run_i+1}/{N_INDEPENDENT_RUNS}] 선택 특징={run_result['n_selected']}/{n_features} "
+              f"fitness={best_fitness:.4f} test_acc={acc:.4f} f1={f1:.4f} 소요={elapsed:.1f}s")
+
+    total_elapsed = time.time() - t_total0
+    accs = [r["test_accuracy"] for r in all_runs]
+    f1s = [r["test_f1_macro"] for r in all_runs]
+    best_run = max(all_runs, key=lambda r: r["test_accuracy"])
+
+    print(f"\n{'='*60}")
+    print(f"20회 독립실행 요약 (총 소요시간 {total_elapsed:.1f}s)")
+    print(f"Test Accuracy: 평균={np.mean(accs):.4f} 최고={np.max(accs):.4f} 최저={np.min(accs):.4f} 표준편차={np.std(accs):.4f}")
+    print(f"Test F1(macro): 평균={np.mean(f1s):.4f} 최고={np.max(f1s):.4f} 최저={np.min(f1s):.4f}")
+    print(f"최고 성능 실행: run={best_run['run']}, 선택특징={best_run['n_selected']}, acc={best_run['test_accuracy']:.4f}")
+    print(f"{'='*60}")
+
+    out = {
+        "hyperparams": {
+            "population": POP_SIZE, "iterations": N_ITER, "n_independent_runs": N_INDEPENDENT_RUNS,
+            "b_const": B_CONST, "threshold": THRESHOLD, "alpha": ALPHA, "beta": BETA, "knn_k": KNN_K,
+        },
+        "total_elapsed_sec": round(total_elapsed, 1),
+        "summary": {
+            "test_accuracy_mean": float(np.mean(accs)), "test_accuracy_max": float(np.max(accs)),
+            "test_accuracy_min": float(np.min(accs)), "test_accuracy_std": float(np.std(accs)),
+            "test_f1_mean": float(np.mean(f1s)), "test_f1_max": float(np.max(f1s)), "test_f1_min": float(np.min(f1s)),
+            "best_run_index": best_run["run"],
+        },
+        "runs": all_runs,
+    }
+    out_path = os.path.join(_DIR, "woa_20runs_result.json")
+    with open(out_path, "w", encoding="utf-8") as f:
+        json.dump(out, f, ensure_ascii=False, indent=2)
+    print(f"결과 저장: {out_path}")

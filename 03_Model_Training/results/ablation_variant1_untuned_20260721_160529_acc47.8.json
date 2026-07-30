@@ -1,0 +1,158 @@
+{
+  "summary": {
+    "timestamp": "2026-07-21 16:05:29",
+    "variant": "variant1_untuned",
+    "hyperparams": {
+      "epochs": 1,
+      "batch_size": 64,
+      "lr": 0.01,
+      "weight_decay": 0.0001,
+      "grad_clip_norm": 1.0,
+      "calibrate_init": true,
+      "seed": 42,
+      "patience": 5,
+      "min_epochs": 15
+    },
+    "actual_epochs": 1,
+    "early_stopped": false,
+    "best_epoch": 1,
+    "best_val_acc": 0.4444,
+    "test_accuracy": 0.4783,
+    "test_precision_macro": 0.4889,
+    "test_recall_macro": 0.3529,
+    "test_f1_macro": 0.2492,
+    "elapsed_sec": 206.7,
+    "vs_paper_study2_diff_pct": -37.92
+  },
+  "test_result": {
+    "loss": 12537.6943359375,
+    "accuracy": 0.4782608695652174,
+    "precision_macro": 0.48888888888888893,
+    "recall_macro": 0.35294117647058826,
+    "f1_macro": 0.24915824915824913,
+    "best_epoch": 1,
+    "best_val_acc": 0.4444444444444444
+  },
+  "paper_vs_model_comparison": [
+    {
+      "항목": "Conv layer 개수",
+      "실험값": "3 (conv1~conv3)",
+      "논문값": "3",
+      "비고": "일치"
+    },
+    {
+      "항목": "Pooling layer 개수",
+      "실험값": "1 (MaxPool3d)",
+      "논문값": "1",
+      "비고": "일치"
+    },
+    {
+      "항목": "구조 단계 Test Accuracy (Study1, 튜닝 전)",
+      "실험값": "-",
+      "논문값": "85.75%",
+      "비고": "Finding: \"Intermediate\""
+    },
+    {
+      "항목": "Pooling 종류",
+      "실험값": "Max (MaxPool3d)",
+      "논문값": "Max",
+      "비고": "일치"
+    },
+    {
+      "항목": "Activation",
+      "실험값": "ReLU",
+      "논문값": "ReLU",
+      "비고": "일치"
+    },
+    {
+      "항목": "Flatten 방식",
+      "실험값": "Flatten",
+      "논문값": "Flatten",
+      "비고": "일치"
+    },
+    {
+      "항목": "Optimizer",
+      "실험값": "Adam",
+      "논문값": "Adam",
+      "비고": "일치"
+    },
+    {
+      "항목": "Batch size",
+      "실험값": "64",
+      "논문값": "64",
+      "비고": "일치"
+    },
+    {
+      "항목": "Learning rate",
+      "실험값": "0.01",
+      "논문값": "0.01",
+      "비고": "일치"
+    },
+    {
+      "항목": "Epoch",
+      "실험값": "1",
+      "논문값": "30",
+      "비고": "다름 - 확인 필요"
+    },
+    {
+      "항목": "Accuracy",
+      "실험값": "47.83%",
+      "논문값": "85.75%",
+      "비고": ""
+    },
+    {
+      "항목": "Precision",
+      "실험값": "48.89%",
+      "논문값": "N/A(Study1 미보고)",
+      "비고": ""
+    },
+    {
+      "항목": "Recall",
+      "실험값": "35.29%",
+      "논문값": "N/A(Study1 미보고)",
+      "비고": ""
+    },
+    {
+      "항목": "F1-score",
+      "실험값": "24.92%",
+      "논문값": "N/A(Study1 미보고)",
+      "비고": ""
+    },
+    {
+      "항목": "Finding (논문 상대순위)",
+      "실험값": "-",
+      "논문값": "\"Intermediate\" (Base/V1/V2/V3 4개 비교 기준)",
+      "비고": "우리는 Base만 실행 - 상대순위는 V1~V3까지 만들어야 확정 가능"
+    },
+    {
+      "항목": "Finding (우리 모델, 자동판정)",
+      "실험값": "논문 대비 상당히 낮음 - 전처리/학습 파이프라인 점검 필요",
+      "논문값": "-",
+      "비고": "기준: Study2 목표(85.75%) 대비 차이 -37.92%p"
+    },
+    {
+      "항목": "총 소요 시간",
+      "실험값": "206.7초 (약 3.4분)",
+      "논문값": "-",
+      "비고": "논문 미기재"
+    },
+    {
+      "항목": "Epoch당 평균 시간",
+      "실험값": "206.7초",
+      "논문값": "-",
+      "비고": "논문 미기재"
+    }
+  ],
+  "n_params": 8707395,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 8338.6755,
+      "train_acc": 0.3302,
+      "val_loss": 14148.5537,
+      "val_acc": 0.4444,
+      "epoch_seconds": 206.67,
+      "timestamp": "16:05:19"
+    }
+  ]
+}

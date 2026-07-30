@@ -1,0 +1,211 @@
+{
+  "summary": {
+    "timestamp": "2026-07-20 20:16:11",
+    "variant": "variant1",
+    "hyperparams": {
+      "epochs": 30,
+      "batch_size": 64,
+      "lr": 0.001,
+      "weight_decay": 0.0001,
+      "grad_clip_norm": 1.0,
+      "calibrate_init": true,
+      "seed": 43,
+      "patience": 5
+    },
+    "actual_epochs": 7,
+    "early_stopped": true,
+    "best_epoch": 2,
+    "best_val_acc": 0.2222,
+    "test_accuracy": 0.1739,
+    "test_precision_macro": 0.058,
+    "test_recall_macro": 0.3333,
+    "test_f1_macro": 0.0988,
+    "elapsed_sec": 1474.6,
+    "vs_paper_study2_diff_pct": -70.86
+  },
+  "test_result": {
+    "loss": 2.3813915252685547,
+    "accuracy": 0.17391304347826086,
+    "precision_macro": 0.057971014492753624,
+    "recall_macro": 0.3333333333333333,
+    "f1_macro": 0.09876543209876543,
+    "best_epoch": 2,
+    "best_val_acc": 0.2222222222222222
+  },
+  "paper_vs_model_comparison": [
+    {
+      "항목": "Conv layer 개수",
+      "실험값": "3 (conv1~conv3)",
+      "논문값": "3",
+      "비고": "일치"
+    },
+    {
+      "항목": "Pooling layer 개수",
+      "실험값": "1 (AvgPool3d)",
+      "논문값": "1",
+      "비고": "일치"
+    },
+    {
+      "항목": "구조 단계 Test Accuracy (Study1, 튜닝 전)",
+      "실험값": "-",
+      "논문값": "85.75%",
+      "비고": "Finding: \"Intermediate\""
+    },
+    {
+      "항목": "Pooling 종류",
+      "실험값": "Average (AvgPool3d)",
+      "논문값": "Average",
+      "비고": "일치"
+    },
+    {
+      "항목": "Activation",
+      "실험값": "ReLU",
+      "논문값": "ReLU",
+      "비고": "일치"
+    },
+    {
+      "항목": "Flatten 방식",
+      "실험값": "Global max (AdaptiveMaxPool3d)",
+      "논문값": "Global max",
+      "비고": "일치"
+    },
+    {
+      "항목": "Optimizer",
+      "실험값": "Adam",
+      "논문값": "Adam",
+      "비고": "일치"
+    },
+    {
+      "항목": "Batch size",
+      "실험값": "64",
+      "논문값": "64",
+      "비고": "일치"
+    },
+    {
+      "항목": "Learning rate",
+      "실험값": "0.001",
+      "논문값": "0.001",
+      "비고": "일치"
+    },
+    {
+      "항목": "Epoch",
+      "실험값": "7",
+      "논문값": "30",
+      "비고": "조기 종료(요청 30epoch 중 7epoch)"
+    },
+    {
+      "항목": "Accuracy",
+      "실험값": "17.39%",
+      "논문값": "88.25%",
+      "비고": ""
+    },
+    {
+      "항목": "Precision",
+      "실험값": "5.80%",
+      "논문값": "89.93%",
+      "비고": ""
+    },
+    {
+      "항목": "Recall",
+      "실험값": "33.33%",
+      "논문값": "84.28%",
+      "비고": ""
+    },
+    {
+      "항목": "F1-score",
+      "실험값": "9.88%",
+      "논문값": "87.43%",
+      "비고": ""
+    },
+    {
+      "항목": "Finding (논문 상대순위)",
+      "실험값": "-",
+      "논문값": "\"Intermediate\" (Base/V1/V2/V3 4개 비교 기준)",
+      "비고": "우리는 Base만 실행 - 상대순위는 V1~V3까지 만들어야 확정 가능"
+    },
+    {
+      "항목": "Finding (우리 모델, 자동판정)",
+      "실험값": "논문 대비 상당히 낮음 - 전처리/학습 파이프라인 점검 필요",
+      "논문값": "-",
+      "비고": "기준: Study2 목표(88.25%) 대비 차이 -70.86%p"
+    },
+    {
+      "항목": "총 소요 시간",
+      "실험값": "1474.6초 (약 24.6분)",
+      "논문값": "-",
+      "비고": "논문 미기재"
+    },
+    {
+      "항목": "Epoch당 평균 시간",
+      "실험값": "210.7초",
+      "논문값": "-",
+      "비고": "논문 미기재"
+    }
+  ],
+  "n_params": 278211,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 11.6348,
+      "train_acc": 0.3774,
+      "val_loss": 6.5897,
+      "val_acc": 0.2,
+      "epoch_seconds": 210.54,
+      "timestamp": "19:54:56"
+    },
+    {
+      "epoch": 2,
+      "train_loss": 3.5498,
+      "train_acc": 0.316,
+      "val_loss": 2.3929,
+      "val_acc": 0.2222,
+      "epoch_seconds": 210.38,
+      "timestamp": "19:58:27"
+    },
+    {
+      "epoch": 3,
+      "train_loss": 1.3342,
+      "train_acc": 0.3868,
+      "val_loss": 3.5629,
+      "val_acc": 0.2,
+      "epoch_seconds": 210.35,
+      "timestamp": "20:01:57"
+    },
+    {
+      "epoch": 4,
+      "train_loss": 1.0487,
+      "train_acc": 0.4575,
+      "val_loss": 3.4801,
+      "val_acc": 0.2,
+      "epoch_seconds": 210.35,
+      "timestamp": "20:05:28"
+    },
+    {
+      "epoch": 5,
+      "train_loss": 0.9906,
+      "train_acc": 0.5283,
+      "val_loss": 1.9452,
+      "val_acc": 0.2,
+      "epoch_seconds": 210.41,
+      "timestamp": "20:08:58"
+    },
+    {
+      "epoch": 6,
+      "train_loss": 1.0003,
+      "train_acc": 0.5,
+      "val_loss": 3.374,
+      "val_acc": 0.2,
+      "epoch_seconds": 210.38,
+      "timestamp": "20:12:28"
+    },
+    {
+      "epoch": 7,
+      "train_loss": 0.9985,
+      "train_acc": 0.4717,
+      "val_loss": 2.621,
+      "val_acc": 0.2,
+      "epoch_seconds": 212.16,
+      "timestamp": "20:16:01"
+    }
+  ]
+}

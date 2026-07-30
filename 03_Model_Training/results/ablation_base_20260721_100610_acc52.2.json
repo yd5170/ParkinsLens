@@ -1,0 +1,419 @@
+{
+  "summary": {
+    "timestamp": "2026-07-21 10:06:10",
+    "variant": "base",
+    "hyperparams": {
+      "epochs": 30,
+      "batch_size": 64,
+      "lr": 0.01,
+      "weight_decay": 0.0001,
+      "grad_clip_norm": 1.0,
+      "calibrate_init": true,
+      "seed": 42,
+      "patience": 999,
+      "min_epochs": 15
+    },
+    "actual_epochs": 30,
+    "early_stopped": false,
+    "best_epoch": 29,
+    "best_val_acc": 0.4667,
+    "test_accuracy": 0.5217,
+    "test_precision_macro": 0.6135,
+    "test_recall_macro": 0.5622,
+    "test_f1_macro": 0.5437,
+    "elapsed_sec": 1097.4,
+    "vs_paper_study2_diff_pct": -32.79
+  },
+  "test_result": {
+    "loss": 207.95718383789062,
+    "accuracy": 0.5217391304347826,
+    "precision_macro": 0.6135005973715651,
+    "recall_macro": 0.5622082166199813,
+    "f1_macro": 0.5436507936507936,
+    "best_epoch": 29,
+    "best_val_acc": 0.4666666666666667
+  },
+  "paper_vs_model_comparison": [
+    {
+      "항목": "Conv layer 개수",
+      "실험값": "2 (conv1, conv2)",
+      "논문값": "2",
+      "비고": "일치"
+    },
+    {
+      "항목": "Pooling layer 개수",
+      "실험값": "1 (MaxPool3d)",
+      "논문값": "1",
+      "비고": "일치"
+    },
+    {
+      "항목": "구조 단계 Test Accuracy (Study1, 튜닝 전)",
+      "실험값": "-",
+      "논문값": "82.02%",
+      "비고": "Finding: \"Lowest accuracy\""
+    },
+    {
+      "항목": "Pooling 종류",
+      "실험값": "Max (MaxPool3d)",
+      "논문값": "Max",
+      "비고": "일치"
+    },
+    {
+      "항목": "Activation",
+      "실험값": "ReLU",
+      "논문값": "ReLU",
+      "비고": "일치"
+    },
+    {
+      "항목": "Flatten 방식",
+      "실험값": "Flatten",
+      "논문값": "Flatten",
+      "비고": "일치"
+    },
+    {
+      "항목": "Optimizer",
+      "실험값": "Adam",
+      "논문값": "Adam",
+      "비고": "일치"
+    },
+    {
+      "항목": "Batch size",
+      "실험값": "64",
+      "논문값": "64",
+      "비고": "일치"
+    },
+    {
+      "항목": "Learning rate",
+      "실험값": "0.01",
+      "논문값": "0.01",
+      "비고": "일치"
+    },
+    {
+      "항목": "Epoch",
+      "실험값": "30",
+      "논문값": "30",
+      "비고": "일치"
+    },
+    {
+      "항목": "Accuracy",
+      "실험값": "52.17%",
+      "논문값": "84.96%",
+      "비고": ""
+    },
+    {
+      "항목": "Precision",
+      "실험값": "61.35%",
+      "논문값": "87.34%",
+      "비고": ""
+    },
+    {
+      "항목": "Recall",
+      "실험값": "56.22%",
+      "논문값": "81.54%",
+      "비고": ""
+    },
+    {
+      "항목": "F1-score",
+      "실험값": "54.37%",
+      "논문값": "85.32%",
+      "비고": ""
+    },
+    {
+      "항목": "Finding (논문 상대순위)",
+      "실험값": "-",
+      "논문값": "\"Lowest accuracy\" (Base/V1/V2/V3 4개 비교 기준)",
+      "비고": "우리는 Base만 실행 - 상대순위는 V1~V3까지 만들어야 확정 가능"
+    },
+    {
+      "항목": "Finding (우리 모델, 자동판정)",
+      "실험값": "논문 대비 상당히 낮음 - 전처리/학습 파이프라인 점검 필요",
+      "논문값": "-",
+      "비고": "기준: Study2 목표(84.96%) 대비 차이 -32.79%p"
+    },
+    {
+      "항목": "총 소요 시간",
+      "실험값": "1097.4초 (약 18.3분)",
+      "논문값": "-",
+      "비고": "논문 미기재"
+    },
+    {
+      "항목": "Epoch당 평균 시간",
+      "실험값": "36.6초",
+      "논문값": "-",
+      "비고": "논문 미기재"
+    }
+  ],
+  "n_params": 4271171,
+  "history": [
+    {
+      "epoch": 1,
+      "train_loss": 3027.8384,
+      "train_acc": 0.2877,
+      "val_loss": 1729.6444,
+      "val_acc": 0.4444,
+      "epoch_seconds": 37.11,
+      "timestamp": "09:48:29"
+    },
+    {
+      "epoch": 2,
+      "train_loss": 3176.545,
+      "train_acc": 0.2972,
+      "val_loss": 5351.3237,
+      "val_acc": 0.4444,
+      "epoch_seconds": 36.61,
+      "timestamp": "09:49:06"
+    },
+    {
+      "epoch": 3,
+      "train_loss": 1570.0788,
+      "train_acc": 0.3679,
+      "val_loss": 3923.5205,
+      "val_acc": 0.4444,
+      "epoch_seconds": 36.58,
+      "timestamp": "09:49:42"
+    },
+    {
+      "epoch": 4,
+      "train_loss": 1906.2718,
+      "train_acc": 0.4198,
+      "val_loss": 1770.5077,
+      "val_acc": 0.4222,
+      "epoch_seconds": 36.58,
+      "timestamp": "09:50:19"
+    },
+    {
+      "epoch": 5,
+      "train_loss": 1823.7157,
+      "train_acc": 0.3208,
+      "val_loss": 2782.0093,
+      "val_acc": 0.4444,
+      "epoch_seconds": 36.56,
+      "timestamp": "09:50:55"
+    },
+    {
+      "epoch": 6,
+      "train_loss": 2204.7114,
+      "train_acc": 0.3821,
+      "val_loss": 929.6832,
+      "val_acc": 0.3778,
+      "epoch_seconds": 36.57,
+      "timestamp": "09:51:32"
+    },
+    {
+      "epoch": 7,
+      "train_loss": 1958.7204,
+      "train_acc": 0.3915,
+      "val_loss": 3408.9712,
+      "val_acc": 0.4444,
+      "epoch_seconds": 36.57,
+      "timestamp": "09:52:09"
+    },
+    {
+      "epoch": 8,
+      "train_loss": 1392.5472,
+      "train_acc": 0.4292,
+      "val_loss": 931.6706,
+      "val_acc": 0.4222,
+      "epoch_seconds": 36.55,
+      "timestamp": "09:52:45"
+    },
+    {
+      "epoch": 9,
+      "train_loss": 915.8008,
+      "train_acc": 0.5189,
+      "val_loss": 1012.775,
+      "val_acc": 0.4222,
+      "epoch_seconds": 36.55,
+      "timestamp": "09:53:22"
+    },
+    {
+      "epoch": 10,
+      "train_loss": 844.6564,
+      "train_acc": 0.4481,
+      "val_loss": 2064.8992,
+      "val_acc": 0.2,
+      "epoch_seconds": 36.56,
+      "timestamp": "09:53:58"
+    },
+    {
+      "epoch": 11,
+      "train_loss": 1139.0231,
+      "train_acc": 0.4953,
+      "val_loss": 2073.395,
+      "val_acc": 0.4444,
+      "epoch_seconds": 36.56,
+      "timestamp": "09:54:35"
+    },
+    {
+      "epoch": 12,
+      "train_loss": 1705.4359,
+      "train_acc": 0.4528,
+      "val_loss": 1575.2126,
+      "val_acc": 0.3778,
+      "epoch_seconds": 36.56,
+      "timestamp": "09:55:11"
+    },
+    {
+      "epoch": 13,
+      "train_loss": 3492.0373,
+      "train_acc": 0.3538,
+      "val_loss": 1007.7105,
+      "val_acc": 0.4,
+      "epoch_seconds": 36.57,
+      "timestamp": "09:55:48"
+    },
+    {
+      "epoch": 14,
+      "train_loss": 1885.6339,
+      "train_acc": 0.4434,
+      "val_loss": 3495.2285,
+      "val_acc": 0.4444,
+      "epoch_seconds": 36.57,
+      "timestamp": "09:56:25"
+    },
+    {
+      "epoch": 15,
+      "train_loss": 1371.7828,
+      "train_acc": 0.4764,
+      "val_loss": 1260.127,
+      "val_acc": 0.4667,
+      "epoch_seconds": 36.56,
+      "timestamp": "09:57:01"
+    },
+    {
+      "epoch": 16,
+      "train_loss": 636.7387,
+      "train_acc": 0.5,
+      "val_loss": 1709.3187,
+      "val_acc": 0.4222,
+      "epoch_seconds": 36.57,
+      "timestamp": "09:57:38"
+    },
+    {
+      "epoch": 17,
+      "train_loss": 183.7623,
+      "train_acc": 0.6934,
+      "val_loss": 954.9134,
+      "val_acc": 0.5111,
+      "epoch_seconds": 36.56,
+      "timestamp": "09:58:14"
+    },
+    {
+      "epoch": 18,
+      "train_loss": 146.4192,
+      "train_acc": 0.7358,
+      "val_loss": 703.9759,
+      "val_acc": 0.4889,
+      "epoch_seconds": 36.56,
+      "timestamp": "09:58:51"
+    },
+    {
+      "epoch": 19,
+      "train_loss": 139.8925,
+      "train_acc": 0.717,
+      "val_loss": 490.0932,
+      "val_acc": 0.4222,
+      "epoch_seconds": 36.55,
+      "timestamp": "09:59:27"
+    },
+    {
+      "epoch": 20,
+      "train_loss": 278.3257,
+      "train_acc": 0.6509,
+      "val_loss": 720.5251,
+      "val_acc": 0.4667,
+      "epoch_seconds": 36.56,
+      "timestamp": "10:00:04"
+    },
+    {
+      "epoch": 21,
+      "train_loss": 484.7369,
+      "train_acc": 0.5849,
+      "val_loss": 1952.2667,
+      "val_acc": 0.4,
+      "epoch_seconds": 36.54,
+      "timestamp": "10:00:40"
+    },
+    {
+      "epoch": 22,
+      "train_loss": 893.7108,
+      "train_acc": 0.6321,
+      "val_loss": 901.693,
+      "val_acc": 0.4222,
+      "epoch_seconds": 36.56,
+      "timestamp": "10:01:17"
+    },
+    {
+      "epoch": 23,
+      "train_loss": 2088.1216,
+      "train_acc": 0.3019,
+      "val_loss": 962.0734,
+      "val_acc": 0.4222,
+      "epoch_seconds": 36.6,
+      "timestamp": "10:01:54"
+    },
+    {
+      "epoch": 24,
+      "train_loss": 462.538,
+      "train_acc": 0.6698,
+      "val_loss": 3516.5269,
+      "val_acc": 0.4444,
+      "epoch_seconds": 36.57,
+      "timestamp": "10:02:30"
+    },
+    {
+      "epoch": 25,
+      "train_loss": 327.6276,
+      "train_acc": 0.6038,
+      "val_loss": 2624.677,
+      "val_acc": 0.4444,
+      "epoch_seconds": 36.54,
+      "timestamp": "10:03:07"
+    },
+    {
+      "epoch": 26,
+      "train_loss": 89.8852,
+      "train_acc": 0.8019,
+      "val_loss": 1813.8981,
+      "val_acc": 0.4444,
+      "epoch_seconds": 36.56,
+      "timestamp": "10:03:43"
+    },
+    {
+      "epoch": 27,
+      "train_loss": 44.6323,
+      "train_acc": 0.8774,
+      "val_loss": 1180.7478,
+      "val_acc": 0.4444,
+      "epoch_seconds": 36.54,
+      "timestamp": "10:04:20"
+    },
+    {
+      "epoch": 28,
+      "train_loss": 77.5217,
+      "train_acc": 0.8538,
+      "val_loss": 924.1613,
+      "val_acc": 0.4667,
+      "epoch_seconds": 36.56,
+      "timestamp": "10:04:56"
+    },
+    {
+      "epoch": 29,
+      "train_loss": 65.9615,
+      "train_acc": 0.8726,
+      "val_loss": 317.2741,
+      "val_acc": 0.4667,
+      "epoch_seconds": 36.54,
+      "timestamp": "10:05:33"
+    },
+    {
+      "epoch": 30,
+      "train_loss": 47.6671,
+      "train_acc": 0.8632,
+      "val_loss": 1010.3458,
+      "val_acc": 0.4444,
+      "epoch_seconds": 36.55,
+      "timestamp": "10:06:09"
+    }
+  ]
+}

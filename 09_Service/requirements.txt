@@ -1,0 +1,3 @@
+# 09_Service 전용 추가 의존성. torch/numpy/scipy/nibabel은 01_Preprocessing,
+# 03_Model_Training에서 이미 쓰고 있는 버전을 그대로 따른다(별도 고정 안 함).
+streamlit>=1.38
